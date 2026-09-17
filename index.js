@@ -17,23 +17,20 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
 
-// Connect MongoDB
-connectDB();
-
-// CORS MUST come before routes
+// CORS
 app.use(
   cors({
     origin: "http://localhost:5173",
   })
 );
 
-// JSON body parser
+// JSON
 app.use(express.json());
 
 // Passport
 app.use(passport.initialize());
 
-// Home route
+// Home
 app.get("/", (req, res) => {
   res.json({
     message: "Express server is working!",
@@ -45,10 +42,23 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 
-
-const PORT = process.env.PORT || 3000;
-
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (require.main === module) {
+  const startServer = async () => {
+    try {
+      await connectDB();
+
+      const PORT = process.env.PORT || 3000;
+
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    } catch (error) {
+      console.error("Server could not start because MongoDB failed.");
+    }
+  };
+
+  startServer();
+}
+
+module.exports = app;
