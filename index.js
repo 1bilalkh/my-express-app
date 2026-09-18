@@ -19,7 +19,6 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
 
 // Start MongoDB connection
-const dbPromise = connectDB();
 
 // CORS
 app.use(
@@ -44,7 +43,7 @@ app.get("/", (req, res) => {
 // MongoDB health check
 app.get("/api/health", async (req, res) => {
   try {
-    await dbPromise;
+    await connectDB();
 
     res.json({
       mongoUriExists: !!process.env.MONGO_URI,
@@ -64,7 +63,7 @@ app.get("/api/health", async (req, res) => {
 // Wait for MongoDB before API routes
 app.use(async (req, res, next) => {
   try {
-    await dbPromise;
+    await connectDB();
     next();
   } catch (error) {
     res.status(500).json({
@@ -83,7 +82,7 @@ app.use("/api/tasks", taskRoutes);
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
 
-  dbPromise
+  connectDB()
     .then(() => {
       app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
