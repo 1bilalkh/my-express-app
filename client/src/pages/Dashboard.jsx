@@ -15,7 +15,7 @@ function Dashboard() {
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
-          "http://localhost:3000/api/auth/profile",
+          "https://my-express-api-pi.vercel.app/api/auth/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,

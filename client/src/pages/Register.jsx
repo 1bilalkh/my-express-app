@@ -40,7 +40,7 @@ function Register() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "https://my-express-api-pi.vercel.app/api/auth/register",
         formData
       );
 
