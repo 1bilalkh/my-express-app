@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import {
   Card,
@@ -14,6 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -53,6 +56,11 @@ function Register() {
         email: "",
         password: "",
       });
+
+      // Redirect to Login after successful registration
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -77,11 +85,15 @@ function Register() {
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-5">
-
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5"
+          >
             {/* Name */}
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">
+                Name
+              </Label>
 
               <Input
                 id="name"
@@ -96,7 +108,9 @@ function Register() {
 
             {/* Email */}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">
+                Email
+              </Label>
 
               <Input
                 id="email"
@@ -111,7 +125,9 @@ function Register() {
 
             {/* Password */}
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">
+                Password
+              </Label>
 
               <Input
                 id="password"
@@ -130,7 +146,9 @@ function Register() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? "Creating Account..." : "Register"}
+              {loading
+                ? "Creating Account..."
+                : "Register"}
             </Button>
 
             {/* Success */}
@@ -146,6 +164,18 @@ function Register() {
                 {error}
               </p>
             )}
+
+            {/* Login link */}
+            <p className="text-center text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="font-medium text-primary hover:underline"
+              >
+                Login
+              </button>
+            </p>
           </form>
         </CardContent>
       </Card>

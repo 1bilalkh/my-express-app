@@ -139,6 +139,16 @@ function Login() {
             >
               Continue with Google
             </Button>
+            <p className="text-center text-sm text-gray-600 mt-4">
+              Don't have an account?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/register")}
+                className="text-blue-600 font-semibold hover:underline"
+              >
+                Create an account
+              </button>
+            </p>
 
             {/* Success */}
             {message && (
