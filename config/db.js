@@ -3,6 +3,12 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
+    console.log(
+      "MONGO_URI starts with:",
+      process.env.MONGO_URI
+        ? process.env.MONGO_URI.substring(0, 14)
+        : "MISSING"
+    );
 
     await mongoose.connect(process.env.MONGO_URI, {
       serverSelectionTimeoutMS: 10000,
