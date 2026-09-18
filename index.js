@@ -21,9 +21,14 @@ const app = express();
 // Start MongoDB connection
 
 // CORS
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://my-express-client-fintech.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
   })
 );
 
