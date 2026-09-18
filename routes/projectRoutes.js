@@ -28,6 +28,25 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
+// Get All Projects
+router.get("/", authMiddleware, async (req, res) => {
+  try {
+    const projects = await Project.find({
+      user: req.user.userId,
+    }).sort({ createdAt: -1 });
+
+    res.json({
+      message: "Projects fetched successfully!",
+      projects,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch projects",
+      error: error.message,
+    });
+  }
+});
+
 // Get Project by ID
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
