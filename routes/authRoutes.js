@@ -8,6 +8,10 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+// ==========================================
+// GOOGLE STRATEGY
+// ==========================================
+
 passport.use(
   new GoogleStrategy(
     {
@@ -17,11 +21,19 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const email = profile.emails[0].value;
+        const email = profile.emails?.[0]?.value;
         const name = profile.displayName;
+
+        if (!email) {
+          return done(
+            new Error("Google account email not available"),
+            null
+          );
+        }
 
         let user = await User.findOne({ email });
 
+        // Create user if it doesn't exist
         if (!user) {
           user = await User.create({
             name,
@@ -30,6 +42,7 @@ passport.use(
           });
         }
 
+        // Add Google ID to an existing account
         if (user && !user.googleId) {
           user.googleId = profile.id;
           await user.save();
@@ -39,9 +52,13 @@ passport.use(
       } catch (error) {
         done(error, null);
       }
-    },
-  ),
+    }
+  )
 );
+
+// ==========================================
+// AUTH TEST
+// ==========================================
 
 router.get("/", (req, res) => {
   res.json({
@@ -49,7 +66,10 @@ router.get("/", (req, res) => {
   });
 });
 
-// Register
+// ==========================================
+// REGISTER
+// ==========================================
+
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -89,7 +109,10 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login
+// ==========================================
+// LOGIN
+// ==========================================
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -97,15 +120,25 @@ router.post("/login", async (req, res) => {
     // Find user
     const user = await User.findOne({ email });
 
-    // Check if user has a password
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    // Google-only account
     if (!user.password) {
       return res.status(400).json({
-        message: "This account uses Google login. Please login with Google.",
+        message:
+          "This account uses Google login. Please login with Google.",
       });
     }
 
     // Compare password
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!passwordMatch) {
       return res.status(400).json({
@@ -122,7 +155,7 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",
-      },
+      }
     );
 
     res.json({
@@ -137,37 +170,53 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/profile", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId).select("-password");
+// ==========================================
+// PROFILE
+// ==========================================
 
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
+router.get(
+  "/profile",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const user = await User.findById(
+        req.user.userId
+      ).select("-password");
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
+      res.json({
+        message: "Protected profile accessed!",
+        user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Failed to get profile",
+        error: error.message,
       });
     }
-
-    res.json({
-      message: "Protected profile accessed!",
-      user,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to get profile",
-      error: error.message,
-    });
   }
-});
+);
 
-// Google Login
+// ==========================================
+// GOOGLE LOGIN
+// ==========================================
+
 router.get(
   "/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
-  }),
+  })
 );
 
-// Google Callback
+// ==========================================
+// GOOGLE CALLBACK
+// ==========================================
+
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -182,11 +231,17 @@ router.get(
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",
-      },
+      }
     );
 
-    res.redirect(`http://localhost:5173/google-success?token=${token}`);
-  },
+    const frontendUrl =
+      process.env.FRONTEND_URL ||
+      "http://localhost:5173";
+
+    res.redirect(
+      `${frontendUrl}/google-success?token=${token}`
+    );
+  }
 );
 
 module.exports = router;

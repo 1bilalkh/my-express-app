@@ -23,6 +23,7 @@ function Login() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -55,21 +56,28 @@ function Login() {
         "Saved token:",
         localStorage.getItem("token")
       );
-      navigate("/dashboard");
 
       setMessage(
         response.data.message || "Login successful!"
       );
+
+      navigate("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
 
       setError(
         err.response?.data?.message ||
-        "Login failed. Please check your email and password."
+          "Login failed. Please check your email and password."
       );
     } finally {
       setLoading(false);
     }
+  };
+
+  // Google Login
+  const handleGoogleLogin = () => {
+    window.location.href =
+      "https://my-express-api-pi.vercel.app/api/auth/google";
   };
 
   return (
@@ -92,7 +100,9 @@ function Login() {
           >
             {/* Email */}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">
+                Email
+              </Label>
 
               <Input
                 id="email"
@@ -107,7 +117,9 @@ function Login() {
 
             {/* Password */}
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">
+                Password
+              </Label>
 
               <Input
                 id="password"
@@ -126,24 +138,29 @@ function Login() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading
+                ? "Logging in..."
+                : "Login"}
             </Button>
+
+            {/* Google button */}
             <Button
               type="button"
               variant="outline"
               className="w-full"
-              onClick={() => {
-                window.location.href =
-                  "http://localhost:3000/api/auth/google";
-              }}
+              onClick={handleGoogleLogin}
             >
               Continue with Google
             </Button>
+
+            {/* Register link */}
             <p className="text-center text-sm text-gray-600 mt-4">
               Don't have an account?{" "}
               <button
                 type="button"
-                onClick={() => navigate("/register")}
+                onClick={() =>
+                  navigate("/register")
+                }
                 className="text-blue-600 font-semibold hover:underline"
               >
                 Create an account
