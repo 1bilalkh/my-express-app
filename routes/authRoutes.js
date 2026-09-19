@@ -2,9 +2,10 @@ const jwt = require("jsonwebtoken");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
+
+
 
 const router = express.Router();
 
@@ -12,49 +13,7 @@ const router = express.Router();
 // GOOGLE STRATEGY
 // ==========================================
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        const email = profile.emails?.[0]?.value;
-        const name = profile.displayName;
 
-        if (!email) {
-          return done(
-            new Error("Google account email not available"),
-            null
-          );
-        }
-
-        let user = await User.findOne({ email });
-
-        // Create user if it doesn't exist
-        if (!user) {
-          user = await User.create({
-            name,
-            email,
-            googleId: profile.id,
-          });
-        }
-
-        // Add Google ID to an existing account
-        if (user && !user.googleId) {
-          user.googleId = profile.id;
-          await user.save();
-        }
-
-        done(null, user);
-      } catch (error) {
-        done(error, null);
-      }
-    }
-  )
-);
 
 // ==========================================
 // AUTH TEST
@@ -206,12 +165,43 @@ router.get(
 // GOOGLE LOGIN
 // ==========================================
 
-router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
+router.get("/google", (req, res, next) => {
+  passport.authenticate(
+    "google",
+    {
+      scope: ["profile", "email"],
+    },
+    (err, user, info) => {
+      console.log("GOOGLE AUTH ERROR:", err);
+      console.log("GOOGLE AUTH USER:", user);
+      console.log("GOOGLE AUTH INFO:", info);
+
+      if (err) {
+        return res.status(500).json({
+          message: "Google authentication error",
+          error: err.message,
+        });
+      }
+
+      if (!user) {
+        return res.status(401).json({
+          message: "Google authentication failed",
+          info,
+        });
+      }
+
+      req.logIn(user, (loginError) => {
+        if (loginError) {
+          return next(loginError);
+        }
+
+        res.json({
+          message: "Google authentication successful",
+        });
+      });
+    }
+  )(req, res, next);
+});
 
 // ==========================================
 // GOOGLE CALLBACK

@@ -1,10 +1,10 @@
-const express = require("express");
 const dotenv = require("dotenv");
+dotenv.config();
+const express = require("express");
+const passport = require("./config/passport");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dns = require("dns");
-
-dotenv.config();
 
 const connectDB = require("./config/db");
 
@@ -12,7 +12,7 @@ const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 
-const passport = require("passport");
+
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
