@@ -13,7 +13,7 @@ function BlogDetail() {
     const fetchBlog = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/blogs/${id}`
+          `https://my-express-api-pi.vercel.app/api/blogs/${id}`
         );
 
         const data = await response.json();

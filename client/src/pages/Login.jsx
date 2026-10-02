@@ -3,17 +3,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { User, Lock } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+
+
+
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -35,45 +30,48 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setMessage("");
-    setError("");
-    setLoading(true);
+  setMessage("");
+  setError("");
+  setLoading(true);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        formData
-      );
+  try {
+    const response = await axios.post(
+      "https://my-express-api-pi.vercel.app/api/auth/login",
+      formData
+    );
 
-      console.log("Login response:", response.data);
+    console.log("Login response:", response.data);
 
-      // Save JWT token
-      localStorage.setItem("token", response.data.token);
+    // Save JWT token
+    localStorage.setItem("token", response.data.token);
 
-      // Check if token was saved
-      console.log(
-        "Saved token:",
-        localStorage.getItem("token")
-      );
+    // Tell Navbar that login status changed
+    window.dispatchEvent(new Event("authChange"));
 
-      setMessage(
-        response.data.message || "Login successful!"
-      );
+    // Check if token was saved
+    console.log(
+      "Saved token:",
+      localStorage.getItem("token")
+    );
 
-      navigate("/");
-    } catch (err) {
-      console.error("Login error:", err);
+    setMessage(
+      response.data.message || "Login successful!"
+    );
 
-      setError(
-        err.response?.data?.message ||
-        "Login failed. Please check your email and password."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    navigate("/");
+  } catch (err) {
+    console.error("Login error:", err);
+
+    setError(
+      err.response?.data?.message ||
+      "Login failed. Please check your email and password."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Google Login
   const handleGoogleLogin = () => {

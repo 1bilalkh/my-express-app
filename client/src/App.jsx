@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   NavLink,
+  Link,
 } from "react-router-dom";
 
 import Login from "./pages/Login";
@@ -327,17 +328,20 @@ function Tasks() {
 function NavbarLayout({ children }) {
   return (
     <>
-    <div className="flex justify-between items-center bg-white mx-auto w-full max-w-6xl border border-gray-300 pl-2.5 pr-2.5 rounded-xl z-50 relative my-4 py-2">
-      <div className="font-bold text-xl bg-blue-600 text-white p-1 rounded-sm">
-        <NavLink to="/" end>
-             LOGO
-        </NavLink>
-       </div>
-      <Navbar />
-      <button className="rounded-full flex items-center justify-center cursor-pointer bg-blue-600 px-4 md:px-5 h-10 text-sm md:text-[15px] text-white hover:ring-2 hover:ring-primary/70 ring-offset-2 ring-offset-white transition-all hover:scale-[1.02] ring-transparent active:scale-[0.98] active:ring-primary overflow-hidden relative">Book A Call</button>
-      
+      <div className="flex justify-between items-center bg-white mx-auto w-full max-w-6xl border border-gray-300 pl-2.5 pr-2.5 rounded-xl z-50 relative my-4 py-2">
+        
+        <div className="font-bold text-xl bg-blue-600 text-white p-1 rounded-sm">
+          <NavLink to="/" end>
+            LOGO
+          </NavLink>
+        </div>
+
+        <Navbar />
+
       </div>
+
       {children}
+
       <Footer />
     </>
   );

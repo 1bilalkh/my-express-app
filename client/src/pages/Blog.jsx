@@ -41,7 +41,7 @@ function Blog() {
         }
 
         const response = await fetch(
-          `http://localhost:3000/api/blogs?page=${currentPage}&limit=${limit}`
+          `https://my-express-api-pi.vercel.app/api/blogs?page=${currentPage}&limit=${limit}`
         );
 
         const data = await response.json();
