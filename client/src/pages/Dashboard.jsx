@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Dashboard() {
@@ -7,15 +6,13 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const getProfile = async () => {
       try {
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
-          "https://my-express-api-pi.vercel.app/api/auth/profile",
+          "http://localhost:3000/api/auth/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -39,16 +36,12 @@ function Dashboard() {
     getProfile();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-
-    navigate("/login");
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading profile...</p>
+        <p className="text-lg">
+          Loading profile...
+        </p>
       </div>
     );
   }
@@ -56,75 +49,46 @@ function Dashboard() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-600">{error}</p>
+        <p className="text-red-600">
+          {error}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-6xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">
-              Dashboard
-            </h1>
-
-            {user && (
-              <p className="text-gray-500 mt-2">
-                Welcome, {user.name}
-              </p>
-            )}
-          </div>
-
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
-
-        {/* Navigation */}
-        <div className="flex gap-4 mb-8">
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="px-4 py-2 rounded-md border"
-          >
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold">
             Dashboard
-          </button>
+          </h1>
 
-          <button
-            onClick={() => navigate("/projects")}
-            className="px-4 py-2 rounded-md border"
-          >
-            Projects
-          </button>
-
-          <button
-            onClick={() => navigate("/tasks")}
-            className="px-4 py-2 rounded-md border"
-          >
-            Tasks
-          </button>
+          {user && (
+            <p className="text-gray-600 mt-2">
+              Welcome, {user.name}
+            </p>
+          )}
         </div>
 
-        {/* User information */}
         {user && (
-          <div className="border rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">
+          <div className="bg-white border rounded-xl p-6 shadow-sm">
+            <h2 className="text-2xl font-semibold mb-6">
               Your Profile
             </h2>
 
-            <p>
-              <strong>Name:</strong> {user.name}
-            </p>
+            <div className="space-y-3">
+              <p>
+                <strong>Name:</strong>{" "}
+                {user.name}
+              </p>
 
-            <p className="mt-2">
-              <strong>Email:</strong> {user.email}
-            </p>
+              <p>
+                <strong>Email:</strong>{" "}
+                {user.email}
+              </p>
+            </div>
           </div>
         )}
 

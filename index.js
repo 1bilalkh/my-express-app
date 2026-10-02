@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 dotenv.config();
+console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
 const express = require("express");
 const passport = require("./config/passport");
 const cors = require("cors");
@@ -9,6 +10,7 @@ const dns = require("dns");
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
+const blogRoutes = require("./routes/blogRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 
@@ -80,6 +82,7 @@ app.use(async (req, res, next) => {
 
 // API routes
 app.use("/api/auth", authRoutes);
+app.use("/api/blogs", blogRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 

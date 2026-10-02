@@ -3,7 +3,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
+  NavLink,
 } from "react-router-dom";
 
 import Login from "./pages/Login";
@@ -11,6 +11,15 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ui/ProtectedRoute";
 import GoogleSuccess from "./pages/GoogleSuccess";
+import Home from "./pages/Home";
+import Navbar from "./components/ui/Navbar";
+import About from "./pages/About";
+import ServicesPage from "./pages/Services";
+import Blog from "./pages/Blog";
+import Contact from "./pages/Contact";
+import BlogDetail from "./pages/BlogDetail";
+import BlogAdmin from "./pages/BlogAdmin";
+import Footer from "./components/Footer";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
@@ -314,6 +323,26 @@ function Tasks() {
   );
 }
 
+
+function NavbarLayout({ children }) {
+  return (
+    <>
+    <div className="flex justify-between items-center bg-white mx-auto w-full max-w-6xl border border-gray-300 pl-2.5 pr-2.5 rounded-xl z-50 relative my-4 py-2">
+      <div className="font-bold text-xl bg-blue-600 text-white p-1 rounded-sm">
+        <NavLink to="/" end>
+             LOGO
+        </NavLink>
+       </div>
+      <Navbar />
+      <button className="rounded-full flex items-center justify-center cursor-pointer bg-blue-600 px-4 md:px-5 h-10 text-sm md:text-[15px] text-white hover:ring-2 hover:ring-primary/70 ring-offset-2 ring-offset-white transition-all hover:scale-[1.02] ring-transparent active:scale-[0.98] active:ring-primary overflow-hidden relative">Book A Call</button>
+      
+      </div>
+      {children}
+      <Footer />
+    </>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -322,23 +351,69 @@ function App() {
         {/* Public routes */}
 
         <Route
-          path="/register"
-          element={<Register />}
-        />
-
-        <Route
           path="/"
           element={
-            <Navigate
-              to="/login"
-              replace
-            />
+            <NavbarLayout>
+              <Home />
+            </NavbarLayout>
           }
         />
 
         <Route
+          path="/about"
+          element={
+            <NavbarLayout>
+              <About />
+            </NavbarLayout>
+          }
+        />
+
+        <Route
+          path="/services"
+          element={
+            <NavbarLayout>
+              <ServicesPage />
+            </NavbarLayout>
+          }
+        />
+
+        <Route
+          path="/blog"
+          element={
+            <NavbarLayout>
+              <Blog />
+            </NavbarLayout>
+          }
+        />
+
+        <Route
+          path="/blog/:id"
+          element={
+            <NavbarLayout>
+              <BlogDetail />
+            </NavbarLayout>
+          }
+        />
+
+        <Route
+          path="/contact"
+          element={
+            <NavbarLayout>
+              <Contact />
+            </NavbarLayout>
+          }
+        />
+
+        {/* Authentication */}
+
+        <Route
           path="/login"
           element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
         />
 
         {/* Protected routes */}
@@ -347,7 +422,19 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <NavbarLayout>
+                <Dashboard />
+              </NavbarLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/blog-admin"
+          element={
+            <ProtectedRoute>
+              <NavbarLayout>
+                <BlogAdmin />
+              </NavbarLayout>
             </ProtectedRoute>
           }
         />
@@ -370,7 +457,7 @@ function App() {
           }
         />
 
-        {/* Google OAuth success */}
+        {/* Google OAuth */}
 
         <Route
           path="/google-success"
