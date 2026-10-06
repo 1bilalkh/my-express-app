@@ -4,6 +4,7 @@ import {
   Workflow,
   BrainCircuit,
 } from "lucide-react";
+import SelectedProjects from "./SelectedProjects";
 
 function Working() {
   return (
@@ -74,6 +75,11 @@ function Working() {
     </div>
   </div>
 </section>
+
+
+      <SelectedProjects />
+
+
     </>
   )
 }
