@@ -13,7 +13,8 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ui/ProtectedRoute";
 import GoogleSuccess from "./pages/GoogleSuccess";
 import Home from "./pages/Home";
-import Navbar from "./components/ui/Navbar";
+//import Navbar from "./components/ui/Navbar";
+import MegaMenu from "./components/Navbar";
 import About from "./pages/About";
 import ServicesPage from "./pages/Services";
 import Blog from "./pages/Blog";
@@ -328,15 +329,11 @@ function Tasks() {
 function NavbarLayout({ children }) {
   return (
     <>
-      <div className="flex justify-between items-center bg-white mx-auto w-full max-w-6xl border border-gray-300 pl-2.5 pr-2.5 rounded-xl z-50 relative my-4 py-2">
+      <div className="fixed top-0 left-0 right-0 border-b backdrop-blur-md flex justify-between items-center bg-white mx-auto w-full max-w-6xl border border-gray-300 pl-2.5 pr-2.5 rounded-xl z-50 my-2">
         
-        <div className="font-bold text-xl bg-blue-600 text-white p-1 rounded-sm">
-          <NavLink to="/" end>
-            LOGO
-          </NavLink>
-        </div>
+        
 
-        <Navbar />
+        <MegaMenu />
 
       </div>
 

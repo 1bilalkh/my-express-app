@@ -31,7 +31,7 @@ function BlogAdmin() {
                 .filter((tag) => tag !== "");
 
             const response = await fetch(
-                "http://localhost:3000/api/blogs",
+                "https://my-express-api-pi.vercel.app/api/blogs",
                 {
                     method: "POST",
                     headers: {
