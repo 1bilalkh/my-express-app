@@ -86,8 +86,7 @@ const MegaMenu = () => {
     <div className="relative w-full" ref={menuRef}>
 
       {/* ================= NAVBAR ================= */}
-      <nav className="bg-white">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+        <div className="mx-auto flex py-2 max-w-7xl items-center justify-between px-4 sm:px-6 rounded-full">
 
           {/* LOGO */}
           <NavLink
@@ -96,7 +95,7 @@ const MegaMenu = () => {
             onClick={() => setMobileOpen(false)}
             className="flex shrink-0 items-center"
           >
-            <div className="rounded-sm bg-blue-600 px-2 py-1 text-xl font-bold text-white">
+            <div className="rounded-sm bg-black px-2 py-1 text-xl font-bold text-white">
               LOGO
             </div>
           </NavLink>
@@ -347,7 +346,7 @@ const MegaMenu = () => {
             </div>
           </div>
         )}
-      </nav>
+      
 
       {/* ================= MEGA MENU ================= */}
       {open && (

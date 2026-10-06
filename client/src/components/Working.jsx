@@ -8,7 +8,7 @@ import {
 function Working() {
   return (
     <>
-        <section className="w-full bg-[#000] px-5 py-40">
+        <section className="w-full bg-black px-5 py-40 mt-38">
   <div className="mx-auto max-w-6xl">
 
     {/* Full Width Heading */}

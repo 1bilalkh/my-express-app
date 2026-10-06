@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 function Hero() {
   return (
-    <section className="container mx-auto px-4 py-44">
+    <section className="container mx-auto px-4 pt-22">
       <div className="max-w-3xl mx-auto text-center">
 
         {/* First Heading */}

@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Navbar from "./components/Navbar.jsx";
+//import Navbar from "./components/Navbar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import Home from "./pages/Home.jsx";
@@ -18,7 +18,6 @@ function App() {
   return (
     <div className="app">
 
-      <Navbar />
 
       <main className="content">
         <Routes>
