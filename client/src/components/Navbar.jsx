@@ -115,7 +115,7 @@ const MegaMenu = () => {
             <button
               type="button"
               onClick={() => setOpen((prev) => !prev)}
-              className="flex h-6 items-center gap-1 text-sm font-medium"
+              className="flex h-6 items-center gap-1"
             >
               <FlipLink>
                 SERVICES

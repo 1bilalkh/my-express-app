@@ -125,7 +125,7 @@ function ProjectCard({ project, index }) {
 
             {/* Project Logo / Main Image */}
             <div className="absolute inset-0 z-20 flex items-center justify-center p-8">
-              <div className="relative flex h-[75%] w-[75%] items-center justify-center">
+              <div className="relative h-[75%] w-[75%] items-center justify-center hidden">
                 <img
                   src={project.projectLogo}
                   alt={`${project.name} logo`}
